@@ -1,5 +1,9 @@
 $(document).ready(function () {
 
+    //Create some global variables
+    var characterURL = "";
+    var characterRating = "";
+
     // Create array of starter characters
     var characters = ["Leslie Knope", "Tom Haverford", "Ron Swanson"];
 
@@ -13,6 +17,14 @@ $(document).ready(function () {
             button.text(characters[i]);
             $("#buttons-view").append(button);
         }
+    }
+
+    //Create function that builds div then pushes each character's GIFS into it
+    function returnCharacter() {
+        var characterDiv = $("<div>");
+        characterDiv.append("Rating: " + characterRating);
+        characterDiv.append("<p><img src=" + characterURL + "></p>");
+        $("#gifs-view").append(characterDiv);
     }
 
     // Calling the renderButtons function to display the intial buttons
@@ -29,6 +41,11 @@ $(document).ready(function () {
             method: "GET"
         }).then(function (response) {
             console.log(response);
+            for (var i = 0; i < response.data.length; i++) {
+                characterURL = response.data[i].url;
+                characterRating = response.data[i].rating;
+                returnCharacter();
+            }
         });
     });
 
