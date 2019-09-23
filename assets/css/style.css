@@ -1,0 +1,14 @@
+.jumbotron {
+    background-image: url("../images/parksandrec.png");
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.lead {
+    text-align: center;
+}
+
+.container {
+    text-align: center;
+}
