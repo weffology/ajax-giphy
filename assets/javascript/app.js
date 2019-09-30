@@ -16,33 +16,34 @@ $(document).ready(function () {
             button.attr("data-name", characters[i]);
             button.text(characters[i]);
             $("#buttons-view").append(button);
+            $("#buttons-view").append(' ');
         }
     }
 
     //Create function that builds div then pushes each character's GIFS into it
     function returnCharacter() {
         var characterDiv = $("<div>");
-        characterDiv.append("Rating: " + characterRating);
-        characterDiv.append("<p><img src=" + characterURL + "></p>");
-        $("#gifs-view").append(characterDiv);
+        characterDiv.append("<p>Rating: " + characterRating + "</p>");
+        characterDiv.append("<img src=" + characterURL + ">");
+        $("#gifs-view").prepend(characterDiv);
     }
 
     // Calling the renderButtons function to display the intial buttons
     renderButtons();
 
     //Create on click function that returns GIFs for that specific button's character
-    $(".character-btn").on("click", function (event) {
+    $(document).on("click",".character-btn", function (event) {
         var character = $(this).attr("data-name");
         var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=aVrBqR9BhdBa1956eBfc5ZJN3tJd86hm&q=" + character + "&limit=10";
 
         // Create ajax call
         $.ajax({
             url: queryURL,
-            method: "GET"
+            method: "GET",
+            dataType: "json",
         }).then(function (response) {
-            console.log(response);
             for (var i = 0; i < response.data.length; i++) {
-                characterURL = response.data[i].url;
+                characterURL = response.data[i].images.fixed_height.url;
                 characterRating = response.data[i].rating;
                 returnCharacter();
             }
@@ -53,8 +54,10 @@ $(document).ready(function () {
     $("#add-character").on("click", function (event) {
         event.preventDefault();
         var character = $("#character-input").val().trim();
-        characters.push(character);
-        renderButtons();
+        if(character != '') {
+            characters.push(character);
+            renderButtons();
+        } 
     });
 
 })
